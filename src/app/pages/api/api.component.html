@@ -1,0 +1,175 @@
+<p>
+  <mat-toolbar>
+    <span>Criador Api</span>
+  </mat-toolbar>
+</p>
+<div class="container-fluid mt--7">
+  <a (click)="salvar()" class="btn btn-sm btn-primary">Salvar</a>
+  <div class="row">
+    <div class="col-xl-12 order-xl-1">
+      <div class="card bg-white shadow">
+        <div class="card-body">
+          <form [formGroup]="form">
+            <div class="row mt-5">
+              <h2 class="heading-small text-muted mb-4">Dados Gerais</h2>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Nome</mat-label>
+                    <input matInput type="text" formControlName="name" class="form-control form-control-alternative" placeholder="">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Local</mat-label>
+                    <input matInput type="text" formControlName="local"  class="form-control form-control-alternative" placeholder="">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Tipo Base Dados</mat-label>
+                    <input matInput type="number" formControlName="tipoBaseDados"  class="form-control form-control-alternative" placeholder="">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="card-header bg-info border-0">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h2 class="heading-small text-muted mb-4">Models</h2>
+                </div>
+                <div class="col-4 text-right">
+                  <a (click)="newModel()" class="btn btn-sm btn-primary">Adicionar</a>
+                </div>
+              </div>
+              <div formArrayName="models" *ngFor="let model of pegarModelsForm(); let i = index;">
+                <div class="pl-lg-4" [formGroupName]="i">
+                  <div class="row" >
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Nome</label>
+                        <input type="text" formControlName="name"  class="form-control form-control-alternative" placeholder="">
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <div class="form-group">
+                        <label class="form-control-label">Observação</label>
+                        <input type="text" formControlName="observacao" class="form-control form-control-alternative" placeholder="">
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <label class="form-control-label">Aggregate Root</label>
+                      <div class="form-group" formGroupName="aggregateRoot">
+                        <label class="form-control-label">Nome Rota</label>
+                        <input type="text" formControlName="nomeRota" class="form-control form-control-alternative" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-header bg-danger border-0">
+                    <div class="row align-items-center">
+                      <div class="col-8">
+                        <h2 class="heading-small text-muted mb-4">Campo</h2>
+                      </div>
+                      <div class="col-4 text-right">
+                        <a (click)="newCampo(i)" class="btn btn-sm btn-primary">Adicionar</a>
+                      </div>
+                    </div>
+                    <div formArrayName="campos" *ngFor="let campo of pegarCamposForm(i); let c = index;">
+                      <div class="pl-lg-4" [formGroupName]="c">
+                        <div class="row" >
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-logradouro">Nome</label>
+                              <input type="text" formControlName="nome"  class="form-control form-control-alternative" placeholder="">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="form-group">
+                              <label class="form-control-label">Tipo</label>
+                              <input type="text" formControlName="tipo" class="form-control form-control-alternative" placeholder="">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="form-group">
+                              <label class="form-control-label">Tamanho</label>
+                              <input type="number" formControlName="tamanho" class="form-control form-control-alternative" placeholder="">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="form-group">
+                              <label class="form-control-label">Required</label>
+                              <input type="number" formControlName="required" class="form-control form-control-alternative" placeholder="">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="form-group">
+                              <label class="form-control-label">Observação</label>
+                              <input type="text" formControlName="observacao" class="form-control form-control-alternative" placeholder="">
+                            </div>
+                          </div>
+                          <div class="row align-items-center">
+                            <div class="col-8 text-right">
+                            </div>
+                            <div class="col-4 text-right">
+                              <a (click)="addForeingKey(i,c)" class="btn btn-sm btn-secondary">Add FK</a>
+                            </div>
+                          </div>
+                            <div class="bg-success" *ngIf="returnForeignKey(campo.get('foreingKey'))">
+                              <label class="form-control-label">Foreing Key</label>
+                              <div class="row">
+                                <div class="form-group col-4" formGroupName="foreingKey">
+                                  <label class="form-control-label">Nome</label>
+                                  <input type="text" formControlName="nome" class="form-control form-control-alternative" placeholder="">
+                                </div>
+                                <div class="form-group col-4" formGroupName="foreingKey">
+                                  <label class="form-control-label">Referência</label>
+                                  <input type="text" formControlName="referencia" class="form-control form-control-alternative" placeholder="">
+                                </div>
+                                <div class="form-group col-4" formGroupName="foreingKey">
+                                  <label class="form-control-label">Relacionamento</label>
+                                  <input type="number" formControlName="relacionamento" class="form-control form-control-alternative" placeholder="">
+                                </div>
+                                <div class="row align-items-center">
+                                  <div class="col-8 text-right">
+                                  </div>
+                                  <div class="col-4 text-right">
+                                    <a (click)="removeForeingKey(i,c)" class="btn btn-sm btn-secondary">Remove FK</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="row align-items-center">
+                        <div class="col-8 text-right">
+                        </div>
+                        <div class="col-4 text-right">
+                          <a (click)="removeCampo(i,c)" class="btn btn-sm btn-danger">Retirar</a>
+                        </div>
+                      </div>
+                      <hr class="my-4" />
+                    </div>
+                  </div>
+
+
+                </div>
+                <div class="row align-items-center">
+                  <div class="col-8 text-right">
+                  </div>
+                  <div class="col-4 text-right">
+                    <a (click)="removeModel(i)" class="btn btn-sm btn-danger">Retirar</a>
+                  </div>
+                </div>
+                <hr class="my-4" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
